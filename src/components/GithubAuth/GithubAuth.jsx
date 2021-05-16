@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import queryString from 'query-string';
 import {
   Avatar,
-  Link,
+  Link as UILink,
   Menu,
   MenuButton,
   MenuItem,
@@ -10,7 +10,8 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { Flex, Text } from '@chakra-ui/layout';
-import { Redirect, useLocation } from 'react-router';
+import { Redirect, useLocation, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import { ReactComponent as GithubLogo } from './github-logo.svg';
@@ -60,7 +61,6 @@ export const GithubAuth = () => {
       const retrieveGithubToken = async () => {
         try {
           const token = await getAccessTokenFromCode(code);
-          console.log('got code!');
           localStorage.setItem(GITHUB_TOKEN_STORAGE_KEY, token);
           onLogin(token);
         } catch (e) {
@@ -99,6 +99,7 @@ export const GithubAuth = () => {
 
 export const GithubAuthButton = () => {
   const { user, onLogout } = useContext(UserContext);
+  const projectMatch = useRouteMatch('/:owner/:repo');
 
   const logout = () => {
     localStorage.removeItem(GITHUB_TOKEN_STORAGE_KEY);
@@ -117,15 +118,20 @@ export const GithubAuthButton = () => {
               <Avatar size="md" name={user.login} src={user.avatar_url} />
             </Flex>
           </MenuButton>
-          <MenuList onClick={logout}>
-            <MenuItem>Logout from {user.login}</MenuItem>
+          <MenuList>
+            <MenuItem onClick={logout}>Logout from {user.login}</MenuItem>
+            {projectMatch && (
+              <MenuItem>
+                <Link to="/">Choose another project</Link>
+              </MenuItem>
+            )}
           </MenuList>
         </Menu>
       </Box>
     );
   }
   return (
-    <Link
+    <UILink
       color="ButtonText"
       textDecoration="none"
       href={githubLoginUrl}
@@ -141,6 +147,6 @@ export const GithubAuthButton = () => {
           <GithubLogo height="48px" width="48px" />
         )}
       </Flex>
-    </Link>
+    </UILink>
   );
 };
