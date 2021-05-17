@@ -9,6 +9,7 @@ import {
   GithubAuth,
   ProjectSelect,
   Gitgraph,
+  Performance,
 } from './components';
 import { UserProvider } from './context/UserContext';
 
@@ -34,7 +35,10 @@ function App() {
                 <Route path="/:owner/:repo">
                   <Flex h="100%">
                     <Box flex="2">
-                      <Kanban history={history} />
+                      <Box mb={4}>
+                        <Kanban history={history} />
+                      </Box>
+                      <Performance />
                     </Box>
                     <Box flex="1">
                       <Gitgraph history={history} />
