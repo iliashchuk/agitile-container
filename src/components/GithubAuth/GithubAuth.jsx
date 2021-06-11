@@ -32,6 +32,8 @@ const params = queryString.stringify({
   allow_signup: true,
 });
 
+// test comment
+
 const githubLoginUrl = `https://github.com/login/oauth/authorize?${params}`;
 
 const getAccessTokenFromCode = async (code) => {
