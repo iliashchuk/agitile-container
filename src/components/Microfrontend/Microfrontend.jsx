@@ -2,13 +2,18 @@ import React, { useEffect } from 'react';
 
 export const Microfrontend = ({ name, host, history, type }) => {
   const renderMicroFrontend = () => {
-    window[`render${name}`](`${name}-container`, history);
+    try {
+      window[`render${name}`](history);
+    } catch (e) {
+      console.log(`${name} has not loaded properly.`, e);
+    }
   };
 
   useEffect(() => {
     const scriptId = `micro-frontend-script-${name}`;
     if (document.getElementById(scriptId)) {
       renderMicroFrontend();
+
       return;
     }
 
@@ -33,6 +38,16 @@ export const Microfrontend = ({ name, host, history, type }) => {
       script.onload = renderMicroFrontend;
       document.head.appendChild(script);
     }
+
+    return () => {
+      if (type === 'react') {
+        try {
+          window[`unmount${name}`](history);
+        } catch (e) {
+          console.log(`${name} has unmounted properly.`, e);
+        }
+      }
+    };
   }, []);
 
   return <main id={`${name}-container`} />;

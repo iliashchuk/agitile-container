@@ -28,7 +28,7 @@ const GITHUB_TOKEN_STORAGE_KEY = 'github-token';
 const params = queryString.stringify({
   client_id: REACT_APP_GITHUB_APP_ID,
   redirect_uri: `${REACT_APP_APP_HOST}authenticate/github`,
-  scope: ['repo', 'user'].join(' '), // space seperated string
+  scope: ['repo', 'user'].join(' '),
   allow_signup: true,
 });
 
